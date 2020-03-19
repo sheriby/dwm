@@ -97,10 +97,11 @@ static const char *termcmd[] = {"st", NULL};
 static const char *browsercmd[] = {"google-chrome-stable", NULL};
 static const char *next_wallpaper[] = {"/home/sher/scripts/next_wallpaper.sh",
                                        NULL};
+// static const char *scrot[] = {"/home/sher/scripts/scrot.sh", NULL};
 
-// static const char *upvol[] = {"/home/sher/scripts/vol-up.sh", NULL};
-// static const char *downvol[] = {"/home/sher/scripts/vol-down.sh", NULL};
-// static const char *mutevol[] = {"/home/sher/scripts/vol-toggle.sh", NULL};
+static const char *upvol[] = {"/home/sher/scripts/volume_up.sh", NULL};
+static const char *downvol[] = {"/home/sher/scripts/volume_down.sh", NULL};
+static const char *mutevol[] = {"/home/sher/scripts/volume_toggle.sh", NULL};
 //
 // static const char *wpcmd[] = {"/home/sher/scripts/wp-change.sh", NULL};
 // static const char *sktogglecmd[] = {"/home/sher/scripts/sck-tog.sh", NULL};
@@ -122,6 +123,10 @@ static Key keys[] = {
     {MODKEY, XK_Return, spawn, {.v = termcmd}},
     {MODKEY, XK_c, spawn, {.v = browsercmd}},
     {MODKEY, XK_n, spawn, {.v = next_wallpaper}},
+    // {MODKEY | ShiftMask, XK_a, spawn, {.v = scrot}},
+    {0, XF86XK_AudioRaiseVolume, spawn, {.v = upvol}},
+    {0, XF86XK_AudioLowerVolume, spawn, {.v = downvol}},
+    {0, XF86XK_AudioMute, spawn, {.v = mutevol}},
     // {MODKEY | ShiftMask, XK_p, spawn, {.v = suspendcmd}},
     // {MODKEY | ControlMask, XK_s, spawn, {.v = sktogglecmd}},
     // {MODKEY, XK_b, spawn, {.v = wpcmd}},
@@ -143,7 +148,7 @@ static Key keys[] = {
     {MODKEY | ShiftMask, XK_f, fullscreen, {0}},
     {MODKEY, XK_space, setlayout, {0}},
     {MODKEY | ShiftMask, XK_space, togglefloating, {0}},
-    // {MODKEY, XK_apostrophe, togglescratch, {.v = scratchpadcmd}},
+    {MODKEY, XK_apostrophe, togglescratch, {.v = scratchpadcmd}},
     {MODKEY, XK_0, view, {.ui = ~0}},
     {MODKEY | ShiftMask, XK_0, tag, {.ui = ~0}},
     {MODKEY, XK_comma, focusmon, {.i = -1}},
