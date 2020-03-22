@@ -307,7 +307,9 @@ static void toggletag(const Arg *arg);
 static void toggleview(const Arg *arg);
 static void togglewin(const Arg *arg);
 static void hidewin(const Arg *arg);
+static void hideotherwins(const Arg *arg);
 static void restorewin(const Arg *arg);
+static void restoreotherwins(const Arg *arg);
 static void unfocus(Client *c, int setfocus);
 static void unmanage(Client *c, int destroyed);
 static void unmapnotify(XEvent *e);
@@ -2284,6 +2286,25 @@ void hidewin(const Arg *arg) {
     Client *c = (Client *)selmon->sel;
     hide(c);
     hiddenWinStack[++hiddenWinStackTop] = c;
+}
+
+void hideotherwins(const Arg *arg) {
+    Client *c = NULL, *i;
+    if (!selmon->sel)
+        return;
+    c = (Client *)selmon->sel;
+    for (i = selmon->clients; i; i = i->next) {
+        if (i != c) {
+            hide(i);
+            hiddenWinStack[++hiddenWinStackTop] = i;
+        }
+    }
+}
+
+void restoreotherwins(const Arg *arg) {
+    while (hiddenWinStackTop != -1) {
+        restorewin(0);
+    }
 }
 
 void restorewin(const Arg *arg) {

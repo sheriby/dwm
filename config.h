@@ -136,6 +136,8 @@ static Key keys[] = {
     {MODKEY, XK_j, viewtoleft, {0}},
     {MODKEY, XK_k, viewtoright, {0}},
     {MODKEY, XK_o, hidewin, {0}},
+    {MODKEY, XK_w, hideotherwins, {0}},
+    {MODKEY | ShiftMask, XK_w, restoreotherwins, {0}},
     {MODKEY | ShiftMask, XK_o, restorewin, {0}},
     {MODKEY | ShiftMask, XK_n, tagtoleft, {0}},
     {MODKEY | ShiftMask, XK_i, tagtoright, {0}},
