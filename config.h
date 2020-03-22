@@ -47,8 +47,9 @@ static const unsigned int alphas[][3] = {
 };
 
 /* tagging */
-static const char *tags[] = {"I",  "II",  "III",  "IV", "V",
-                             "VI", "VII", "VIII", "IX"};
+// static const char *tags[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+static const char *tags[] = {"i",  "ii",  "iii",  "iv", "v",
+                             "vi", "vii", "viii", "ix"};
 
 static const Rule rules[] = {
     /* xprop(1):
@@ -134,6 +135,8 @@ static Key keys[] = {
     {MODKEY, XK_l, focusstack, {.i = -1}},
     {MODKEY, XK_j, viewtoleft, {0}},
     {MODKEY, XK_k, viewtoright, {0}},
+    {MODKEY, XK_o, hidewin, {0}},
+    {MODKEY | ShiftMask, XK_o, restorewin, {0}},
     {MODKEY | ShiftMask, XK_n, tagtoleft, {0}},
     {MODKEY | ShiftMask, XK_i, tagtoright, {0}},
     {MODKEY | ShiftMask, XK_h, incnmaster, {.i = +1}},
