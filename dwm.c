@@ -2294,7 +2294,7 @@ void hideotherwins(const Arg *arg) {
         return;
     c = (Client *)selmon->sel;
     for (i = selmon->clients; i; i = i->next) {
-        if (i != c) {
+        if (i != c && ISVISIBLE(i)) {
             hide(i);
             hiddenWinStack[++hiddenWinStackTop] = i;
         }
