@@ -2303,8 +2303,18 @@ void hideotherwins(const Arg *arg) {
 }
 
 void restoreotherwins(const Arg *arg) {
-    while (hiddenWinStackTop != -1) {
-        restorewin(0);
+    int i;
+    for (i = 0; i <= hiddenWinStackTop; ++i) {
+        if (HIDDEN(hiddenWinStack[i]) &&
+            hiddenWinStack[i]->tags == selmon->tagset[selmon->seltags]) {
+            show(hiddenWinStack[i]);
+            focus(hiddenWinStack[i]);
+            restack(selmon);
+            memcpy(hiddenWinStack + i, hiddenWinStack + i + 1,
+                   (hiddenWinStackTop - i) * sizeof(Client *));
+            --hiddenWinStackTop;
+            --i;
+        }
     }
 }
 
