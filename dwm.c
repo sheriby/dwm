@@ -309,6 +309,7 @@ static void togglewin(const Arg *arg);
 static void hidewin(const Arg *arg);
 static void hideotherwins(const Arg *arg);
 static void focuswin(const Arg *arg);
+static int issinglewin(const Arg *arg);
 static void restorewin(const Arg *arg);
 static void restoreotherwins(const Arg *arg);
 static void unfocus(Client *c, int setfocus);
@@ -1084,21 +1085,28 @@ void focusmon(const Arg *arg) {
 void focusstack(const Arg *arg) {
     Client *c = NULL, *i;
 
+    if (issinglewin(arg)) {
+        focuswin(arg);
+        return;
+    }
+
     if (!selmon->sel)
         return;
     if (arg->i > 0) {
-        for (c = selmon->sel->next; c && !ISVISIBLE(c); c = c->next)
+        for (c = selmon->sel->next; c && (!ISVISIBLE(c) || HIDDEN(c));
+             c = c->next)
             ;
         if (!c)
-            for (c = selmon->clients; c && !ISVISIBLE(c); c = c->next)
+            for (c = selmon->clients; c && (!ISVISIBLE(c) || HIDDEN(c));
+                 c = c->next)
                 ;
     } else {
         for (i = selmon->clients; i != selmon->sel; i = i->next)
-            if (ISVISIBLE(i))
+            if (ISVISIBLE(i) && !HIDDEN(i))
                 c = i;
         if (!c)
             for (; i; i = i->next)
-                if (ISVISIBLE(i))
+                if (ISVISIBLE(i) && !HIDDEN(i))
                     c = i;
     }
     if (c) {
@@ -2308,7 +2316,6 @@ void restoreotherwins(const Arg *arg) {
         if (HIDDEN(hiddenWinStack[i]) &&
             hiddenWinStack[i]->tags == selmon->tagset[selmon->seltags]) {
             show(hiddenWinStack[i]);
-            focus(hiddenWinStack[i]);
             restack(selmon);
             memcpy(hiddenWinStack + i, hiddenWinStack + i + 1,
                    (hiddenWinStackTop - i) * sizeof(Client *));
@@ -2359,6 +2366,21 @@ void focuswin(const Arg *arg) {
             }
         }
     }
+}
+
+int issinglewin(const Arg *arg) {
+    Client *c = NULL;
+    int cot = 0;
+    int tag = selmon->tagset[selmon->seltags];
+    for (c = selmon->clients; c; c = c->next) {
+        if (ISVISIBLE(c) && !HIDDEN(c) && c->tags == tag) {
+            cot++;
+        }
+        if (cot > 1) {
+            return 0;
+        }
+    }
+    return 1;
 }
 
 void restorewin(const Arg *arg) {

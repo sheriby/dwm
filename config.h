@@ -139,9 +139,6 @@ static Key keys[] = {
     {MODKEY | ShiftMask, XK_o, restorewin, {0}},
     {MODKEY, XK_w, hideotherwins, {0}},
     {MODKEY | ShiftMask, XK_w, restoreotherwins, {0}},
-
-    {MODKEY | ShiftMask, XK_u, focuswin, {.i = +1}},
-    {MODKEY | ShiftMask, XK_l, focuswin, {.i = -1}},
     {MODKEY | ShiftMask, XK_n, tagtoleft, {0}},
     {MODKEY | ShiftMask, XK_i, tagtoright, {0}},
     // {MODKEY | ShiftMask, XK_h, incnmaster, {.i = +1}},
