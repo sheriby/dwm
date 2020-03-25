@@ -247,6 +247,8 @@ static void hide(Client *c);
 static void incnmaster(const Arg *arg);
 static void keypress(XEvent *e);
 static void killclient(const Arg *arg);
+static void killawin(Client *c);
+static void killothers(const Arg *arg);
 static void manage(Window w, XWindowAttributes *wa);
 static void mappingnotify(XEvent *e);
 static void maprequest(XEvent *e);
@@ -1286,18 +1288,34 @@ void keypress(XEvent *e) {
             keys[i].func(&(keys[i].arg));
 }
 
-void killclient(const Arg *arg) {
-    if (!selmon->sel)
+void killclient(const Arg *arg) { killawin(selmon->sel); }
+
+void killawin(Client *c) {
+    if (!c) {
         return;
-    if (!sendevent(selmon->sel->win, wmatom[WMDelete], NoEventMask,
-                   wmatom[WMDelete], CurrentTime, 0, 0, 0)) {
+    }
+    if (!sendevent(c->win, wmatom[WMDelete], NoEventMask, wmatom[WMDelete],
+                   CurrentTime, 0, 0, 0)) {
         XGrabServer(dpy);
         XSetErrorHandler(xerrordummy);
         XSetCloseDownMode(dpy, DestroyAll);
-        XKillClient(dpy, selmon->sel->win);
+        XKillClient(dpy, c->win);
         XSync(dpy, False);
         XSetErrorHandler(xerror);
         XUngrabServer(dpy);
+    }
+}
+
+void killothers(const Arg *arg) {
+    Client *i = NULL;
+    int tag = 0;
+    if (!selmon->sel)
+        return;
+
+    tag = selmon->tagset[selmon->seltags];
+    for (i = selmon->clients; i && ISVISIBLE(i) && !HIDDEN(i); i = i->next) {
+        if (i->tags == tag && i != selmon->sel)
+            killawin(i);
     }
 }
 
