@@ -1308,13 +1308,13 @@ void killawin(Client *c) {
 
 void killothers(const Arg *arg) {
     Client *i = NULL;
-    int tag = 0;
+    int tag;
     if (!selmon->sel)
         return;
 
     tag = selmon->tagset[selmon->seltags];
-    for (i = selmon->clients; i && ISVISIBLE(i) && !HIDDEN(i); i = i->next) {
-        if (i->tags == tag && i != selmon->sel)
+    for (i = selmon->clients; i; i = i->next) {
+        if (i->tags == tag && ISVISIBLE(i) && !HIDDEN(i) && i != selmon->sel)
             killawin(i);
     }
 }
